@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladoo Bot & Khushi Bot - Best Friends Forever</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffcce6, #e6f2ff, #e6fffa);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container {
+            position: relative;
+            width: 900px;
+            height: 600px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            perspective: 1000px;
+        }
+        
+        .robot {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+        
+        .robot:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+        
+        .head {
+            width: 140px;
+            height: 140px;
+            border-radius: 70px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            animation: head-bob 4s infinite ease-in-out;
+            transition: all 0.5s ease;
+        }
+        
+        .ladoo .head {
+            background: linear-gradient(135deg, #ff9966, #ff5e62, #ff9966);
+        }
+        
+        .khushi .head {
+            background: linear-gradient(135deg, #a8edea, #fed6e3, #a8edea);
+        }
+        
+        .face {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .eyes {
+            display: flex;
+            justify-content: space-between;
+            width: 70px;
+        }
+        
+        .eye {
+            width: 24px;
+            height: 24px;
+            background: #333;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: blink 5s infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .eye::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+            left: 5px;
+        }
+        
+        .mouth {
+            width: 40px;
+            height: 15px;
+            background: #ff5e62;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            bottom: 20px;
+            animation: smile 6s infinite alternate;
+            transition: all 0.5s ease;
+        }
+        
+        .khushi .mouth {
+            background: #a8edea;
+            animation: big-smile 6s infinite alternate;
+        }
+        
+        .blush {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            background: rgba(255, 150, 150, 0.4);
+            border-radius: 50%;
+            bottom: 25px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .ladoo .blush {
+            left: 10px;
+        }
+        
+        .khushi .blush {
+            right: 10px;
+        }
+        
+        .body {
+            width: 160px;
+            height: 140px;
+            border-radius: 25px;
+            margin-top: -25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            animation: body-bounce 3s infinite ease-in-out;
+            transition: all 0.5s ease;
+        }
+        
+        .ladoo .body {
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+        }
+        
+        .khushi .body {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+        }
+        
+        .screen {
+            width: 120px;
+            height: 90px;
+            background: #333;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            padding: 8px;
+            animation: screen-pulse 4s infinite;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        .screen::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: screen-shine 6s infinite;
+        }
+        
+        .arms {
+            position: absolute;
+            top: 150px;
+            width: 240px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 0;
+        }
+        
+        .arm {
+            width: 25px;
+            height: 90px;
+            border-radius: 12px;
+            transition: all 0.5s ease;
+        }
+        
+        .ladoo .arm {
+            background: linear-gradient(to bottom, #ff9966, #ff5e62);
+        }
+        
+        .khushi .arm {
+            background: linear-gradient(to bottom, #a8edea, #fed6e3);
+        }
+        
+        .left-arm {
+            transform: rotate(30deg);
+            transform-origin: top right;
+            animation: wave-left 3s infinite alternate;
+        }
+        
+        .right-arm {
+            transform: rotate(-30deg);
+            transform-origin: top left;
+            animation: wave-right 3s infinite alternate;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 60px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            z-index: 3;
+        }
+        
+        .heart {
+            width: 35px;
+            height: 35px;
+            background: #ff5e62;
+            transform: rotate(45deg);
+            position: relative;
+            animation: float 4s infinite ease-in-out;
+            opacity: 0.9;
+        }
+        
+        .heart::before, .heart::after {
+            content: '';
+            width: 35px;
+            height: 35px;
+            background: #ff5e62;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart::before {
+            top: -17px;
+            left: 0;
+        }
+        
+        .heart::after {
+            top: 0;
+            left: -17px;
+        }
+        
+        .heart:nth-child(2) {
+            animation-delay: 0.7s;
+            background: #ff9966;
+        }
+        
+        .heart:nth-child(3) {
+            animation-delay: 1.4s;
+            background: #a8edea;
+        }
+        
+        .name-tag {
+            margin-top: 25px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: white;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: tag-bounce 3s infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .ladoo .name-tag {
+            color: #ff5e62;
+            text-shadow: 1px 1px 2px rgba(255, 94, 98, 0.3);
+        }
+        
+        .khushi .name-tag {
+            color: #a8edea;
+            text-shadow: 1px 1px 2px rgba(168, 237, 234, 0.3);
+        }
+        
+        .connection-line {
+            position: absolute;
+            top: 180px;
+            width: 350px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            z-index: 0;
+            animation: line-pulse 3s infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .connection-line::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: -4px;
+            left: 0;
+            animation: data-flow 4s infinite linear;
+            box-shadow: 0 0 10px white;
+        }
+        
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle-fall 6s infinite linear;
+            box-shadow: 0 0 8px white;
+        }
+        
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px 15px 0 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .bubbles {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .bubble {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: bubble-rise 5s infinite ease-in;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .bubble:nth-child(2) {
+            animation-delay: 1.2s;
+            width: 15px;
+            height: 15px;
+        }
+        
+        .bubble:nth-child(3) {
+            animation-delay: 2.4s;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .bubble:nth-child(4) {
+            animation-delay: 3.6s;
+            width: 12px;
+            height: 12px;
+        }
+        
+        .glow {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff5e62;
+            border-radius: 50%;
+            filter: blur(5px);
+            animation: glow 2s infinite alternate;
+            z-index: 1;
+        }
+        
+        .ladoo .glow {
+            top: 60px;
+            left: 45px;
+        }
+        
+        .khushi .glow {
+            top: 60px;
+            right: 45px;
+        }
+        
+        .title {
+            position: absolute;
+            top: 25px;
+            font-size: 32px;
+            color: #ff5e62;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.15);
+            animation: title-pulse 4s infinite;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 60px;
+            display: flex;
+            gap: 25px;
+            z-index: 20;
+        }
+        
+        .control-btn {
+            padding: 12px 25px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+            font-size: 16px;
+            color: #ff5e62;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: left 0.5s;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .control-btn:hover::before {
+            left: 100%;
+        }
+        
+        .speech-bubble {
+            position: absolute;
+            top: -70px;
+            background: white;
+            padding: 12px 18px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            max-width: 180px;
+            text-align: center;
+            font-size: 16px;
+            z-index: 15;
+        }
+        
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 12px 12px 0 12px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+        
+        .ladoo .speech-bubble {
+            color: #ff5e62;
+        }
+        
+        .khushi .speech-bubble {
+            color: #a8edea;
+        }
+        
+        /* Hug animation styles */
+        .hug-mode .robot {
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .hug-mode .ladoo {
+            transform: translateX(120px) rotate(-5deg);
+        }
+        
+        .hug-mode .khushi {
+            transform: translateX(-120px) rotate(5deg);
+        }
+        
+        .hug-mode .arms {
+            animation: hug-arms 2.5s forwards;
+        }
+        
+        .hug-mode .connection-line {
+            animation: stretch-line 1.2s forwards;
+        }
+        
+        .hug-mode .hearts {
+            animation: burst-hearts 2.5s forwards;
+        }
+        
+        .hug-mode .blush {
+            opacity: 1;
+        }
+        
+        /* Kiss animation styles */
+        .kiss-mode .robot {
+            transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .kiss-mode .ladoo {
+            transform: translateX(140px) rotate(-8deg);
+        }
+        
+        .kiss-mode .khushi {
+            transform: translateX(-140px) rotate(8deg);
+        }
+        
+        .kiss-mode .arms {
+            animation: kiss-arms 2s forwards;
+        }
+        
+        .kiss-mode .connection-line {
+            animation: hide-line 0.8s forwards;
+        }
+        
+        .kiss-mode .hearts {
+            animation: kiss-hearts 3s forwards;
+        }
+        
+        .kiss-mode .mouth {
+            animation: kiss-mouth 2s forwards;
+        }
+        
+        .kiss-mode .blush {
+            opacity: 1;
+        }
+        
+        .kiss-animation {
+            position: absolute;
+            top: 140px;
+            width: 70px;
+            height: 35px;
+            background: #ff5e62;
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 4;
+            filter: blur(8px);
+            animation: kiss-effect 2s forwards;
+            box-shadow: 0 0 20px #ff5e62;
+        }
+        
+        /* Dance animation styles */
+        .dance-mode .robot {
+            animation: dance-move 2s infinite alternate;
+        }
+        
+        .dance-mode .ladoo {
+            animation-delay: 0s;
+        }
+        
+        .dance-mode .khushi {
+            animation-delay: 0.5s;
+        }
+        
+        .dance-mode .head {
+            animation: dance-head 1s infinite alternate;
+        }
+        
+        .dance-mode .arms {
+            animation: dance-arms 1.5s infinite alternate;
+        }
+        
+        .dance-mode .connection-line {
+            animation: dance-line 2s infinite;
+        }
+        
+        /* Gift animation styles */
+        .gift-mode .robot {
+            transition: all 1s ease;
+        }
+        
+        .gift-mode .ladoo {
+            transform: translateX(80px);
+        }
+        
+        .gift-mode .khushi {
+            transform: translateX(-80px);
+        }
+        
+        .gift {
+            position: absolute;
+            top: 180px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            border-radius: 10px;
+            z-index: 5;
+            opacity: 0;
+            transform: scale(0);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .gift-mode .gift {
+            animation: gift-appear 1.5s forwards;
+        }
+        
+        /* Photo animation styles */
+        .photo-mode .robot {
+            transition: all 1.2s ease;
+        }
+        
+        .photo-mode .ladoo {
+            transform: translateX(60px) rotate(-5deg);
+        }
+        
+        .photo-mode .khushi {
+            transform: translateX(-60px) rotate(5deg);
+        }
+        
+        .photo-frame {
+            position: absolute;
+            top: 120px;
+            width: 200px;
+            height: 150px;
+            background: white;
+            border-radius: 10px;
+            z-index: 5;
+            opacity: 0;
+            transform: scale(0);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .photo-mode .photo-frame {
+            animation: photo-appear 2s forwards;
+        }
+        
+        .photo-content {
+            width: 90%;
+            height: 90%;
+            background: linear-gradient(135deg, #ffcce6, #e6f2ff);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #ff5e62;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        /* Background elements */
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ff5e62;
+            transform: rotate(45deg);
+            opacity: 0;
+            animation: float-around 15s infinite linear;
+        }
+        
+        .floating-heart::before, .floating-heart::after {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: #ff5e62;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .floating-heart::before {
+            top: -15px;
+            left: 0;
+        }
+        
+        .floating-heart::after {
+            top: 0;
+            left: -15px;
+        }
+        
+        .floating-heart:nth-child(2) {
+            background: #ff9966;
+            animation-delay: 3s;
+            animation-duration: 18s;
+        }
+        
+        .floating-heart:nth-child(3) {
+            background: #a8edea;
+            animation-delay: 6s;
+            animation-duration: 20s;
+        }
+        
+        .floating-heart:nth-child(4) {
+            background: #fed6e3;
+            animation-delay: 9s;
+            animation-duration: 16s;
+        }
+        
+        .floating-heart:nth-child(5) {
+            background: #ff5e62;
+            animation-delay: 12s;
+            animation-duration: 22s;
+        }
+        
+        /* Keyframes */
+        @keyframes head-bob {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            25% { transform: translateY(-5px) rotate(1deg); }
+            75% { transform: translateY(3px) rotate(-1deg); }
+        }
+        
+        @keyframes body-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+        
+        @keyframes blink {
+            0%, 90%, 100% { height: 24px; }
+            95% { height: 3px; }
+        }
+        
+        @keyframes smile {
+            0%, 100% { width: 40px; height: 15px; border-radius: 0 0 20px 20px; }
+            50% { width: 35px; height: 18px; border-radius: 0 0 18px 18px; }
+        }
+        
+        @keyframes big-smile {
+            0%, 100% { width: 40px; height: 15px; border-radius: 0 0 20px 20px; }
+            50% { width: 45px; height: 20px; border-radius: 0 0 22px 22px; }
+        }
+        
+        @keyframes wave-left {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(15deg); }
+        }
+        
+        @keyframes wave-right {
+            0% { transform: rotate(-30deg); }
+            100% { transform: rotate(-15deg); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: rotate(45deg) translateY(0) scale(1); opacity: 0.9; }
+            50% { transform: rotate(45deg) translateY(-25px) scale(1.1); opacity: 0.7; }
+        }
+        
+        @keyframes tag-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes screen-pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(0,0,0,0.3); }
+            50% { box-shadow: 0 0 20px rgba(255,255,255,0.7); }
+        }
+        
+        @keyframes screen-shine {
+            0% { transform: translateX(-100%); }
+            20%, 100% { transform: translateX(100%); }
+        }
+        
+        @keyframes line-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes data-flow {
+            0% { left: 0; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes sparkle-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes bubble-rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-250px) scale(1.8); opacity: 0; }
+        }
+        
+        @keyframes glow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.8); }
+        }
+        
+        @keyframes title-pulse {
+            0%, 100% { transform: scale(1); text-shadow: 3px 3px 6px rgba(0,0,0,0.15); }
+            50% { transform: scale(1.05); text-shadow: 5px 5px 10px rgba(0,0,0,0.2); }
+        }
+        
+        /* Hug animation keyframes */
+        @keyframes hug-arms {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(0) scaleX(1.3); }
+            100% { transform: translateX(0) scaleX(1); }
+        }
+        
+        @keyframes stretch-line {
+            0% { width: 350px; }
+            100% { width: 110px; }
+        }
+        
+        @keyframes burst-hearts {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        
+        /* Kiss animation keyframes */
+        @keyframes kiss-arms {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(0) scaleX(1.2); }
+            100% { transform: translateX(0) scaleX(1); }
+        }
+        
+        @keyframes hide-line {
+            0% { opacity: 0.6; }
+            100% { opacity: 0; }
+        }
+        
+        @keyframes kiss-hearts {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.8); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        @keyframes kiss-mouth {
+            0% { width: 40px; height: 15px; border-radius: 0 0 20px 20px; }
+            30% { width: 25px; height: 8px; border-radius: 50%; background: #ff3366; }
+            70% { width: 25px; height: 8px; border-radius: 50%; background: #ff3366; }
+            100% { width: 40px; height: 15px; border-radius: 0 0 20px 20px; }
+        }
+        
+        @keyframes kiss-effect {
+            0% { transform: scale(0); opacity: 0; }
+            30% { transform: scale(1); opacity: 0.8; }
+            70% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+        
+        /* Dance animation keyframes */
+        @keyframes dance-move {
+            0% { transform: translateY(0) rotate(0); }
+            100% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes dance-head {
+            0% { transform: translateY(0) rotate(0); }
+            100% { transform: translateY(-5px) rotate(3deg); }
+        }
+        
+        @keyframes dance-arms {
+            0% { transform: translateX(0) scaleX(1); }
+            100% { transform: translateX(0) scaleX(1.1); }
+        }
+        
+        @keyframes dance-line {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Gift animation keyframes */
+        @keyframes gift-appear {
+            0% { opacity: 0; transform: scale(0) rotate(0); }
+            50% { opacity: 1; transform: scale(1.1) rotate(5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+        
+        /* Photo animation keyframes */
+        @keyframes photo-appear {
+            0% { opacity: 0; transform: scale(0) rotate(-10deg); }
+            60% { opacity: 1; transform: scale(1.05) rotate(2deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+        
+        /* Floating hearts keyframes */
+        @keyframes float-around {
+            0% { transform: rotate(45deg) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 0.7; transform: rotate(45deg) translate(20px, -20px) scale(1); }
+            90% { opacity: 0.7; }
+            100% { transform: rotate(45deg) translate(100px, -600px) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Ladoo Bot & Khushi Bot - Best Friends Forever</div>
+    
+    <div class="container" id="container">
+        <div class="robot ladoo">
+            <div class="speech-bubble" id="ladoo-speech">I miss you moto!</div>
+            <div class="head">
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye"></div>
+                        <div class="eye"></div>
+                    </div>
+                    <div class="mouth"></div>
+                    <div class="blush"></div>
+                </div>
+                <div class="glow"></div>
+            </div>
+            <div class="arms">
+                <div class="arm left-arm"></div>
+                <div class="arm right-arm"></div>
+            </div>
+            <div class="body">
+                <div class="screen">Ladoo Bot<br>Sweet & Friendly</div>
+            </div>
+            <div class="name-tag">Ladoo Bot</div>
+        </div>
+        
+        <div class="hearts">
+            <div class="heart"></div>
+            <div class="heart"></div>
+            <div class="heart"></div>
+        </div>
+        
+        <div class="connection-line"></div>
+        
+        <div class="robot khushi">
+            <div class="speech-bubble" id="khushi-speech">I miss you too!</div>
+            <div class="head">
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye"></div>
+                        <div class="eye"></div>
+                    </div>
+                    <div class="mouth"></div>
+                    <div class="blush"></div>
+                </div>
+                <div class="glow"></div>
+            </div>
+            <div class="arms">
+                <div class="arm left-arm"></div>
+                <div class="arm right-arm"></div>
+            </div>
+            <div class="body">
+                <div class="screen">Khushi Bot<br>Happy & Joyful</div>
+            </div>
+            <div class="name-tag">Khushi Bot</div>
+        </div>
+        
+        <div class="gift">🎁</div>
+        
+        <div class="photo-frame">
+            <div class="photo-content">Best Friends Forever! 💖</div>
+        </div>
+        
+        <div class="sparkles" id="sparkles"></div>
+        
+        <div class="ground"></div>
+        
+        <div class="bubbles">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
+    </div>
+
+    <div class="floating-hearts">
+        <div class="floating-heart"></div>
+        <div class="floating-heart"></div>
+        <div class="floating-heart"></div>
+        <div class="floating-heart"></div>
+        <div class="floating-heart"></div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" id="hug-btn">Give Hug</button>
+        <button class="control-btn" id="kiss-btn">Give Kiss</button>
+        <button class="control-btn" id="dance-btn">Dance Together</button>
+        <button class="control-btn" id="gift-btn">Give Gift</button>
+        <button class="control-btn" id="photo-btn">Take Photo</button>
+        <button class="control-btn" id="talk-btn">Say I Miss You</button>
+        <button class="control-btn" id="reset-btn">Reset</button>
+    </div>
+
+    <script>
+        // Create sparkles dynamically
+        const sparklesContainer = document.getElementById('sparkles');
+        
+        for (let i = 0; i < 20; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = `${Math.random() * 100}%`;
+            sparkle.style.animationDelay = `${Math.random() * 6}s`;
+            sparklesContainer.appendChild(sparkle);
+        }
+        
+        // Add hover effect for robots
+        const robots = document.querySelectorAll('.robot');
+        
+        robots.forEach(robot => {
+            robot.addEventListener('mouseenter', () => {
+                const screen = robot.querySelector('.screen');
+                const blush = robot.querySelector('.blush');
+                if (robot.classList.contains('ladoo')) {
+                    screen.textContent = "Hello! I'm Ladoo!";
+                } else {
+                    screen.textContent = "Hi! I'm Khushi!";
+                }
+                blush.style.opacity = '1';
+            });
+            
+            robot.addEventListener('mouseleave', () => {
+                const screen = robot.querySelector('.screen');
+                const blush = robot.querySelector('.blush');
+                if (robot.classList.contains('ladoo')) {
+                    screen.textContent = "Ladoo Bot\nSweet & Friendly";
+                } else {
+                    screen.textContent = "Khushi Bot\nHappy & Joyful";
+                }
+                blush.style.opacity = '0';
+            });
+        });
+        
+        // Button functionality
+        const hugBtn = document.getElementById('hug-btn');
+        const kissBtn = document.getElementById('kiss-btn');
+        const danceBtn = document.getElementById('dance-btn');
+        const giftBtn = document.getElementById('gift-btn');
+        const photoBtn = document.getElementById('photo-btn');
+        const talkBtn = document.getElementById('talk-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const container = document.getElementById('container');
+        const ladooSpeech = document.getElementById('ladoo-speech');
+        const khushiSpeech = document.getElementById('khushi-speech');
+        
+        // Reset function
+        function resetAll() {
+            container.classList.remove('hug-mode', 'kiss-mode', 'dance-mode', 'gift-mode', 'photo-mode');
+            ladooSpeech.style.opacity = '0';
+            khushiSpeech.style.opacity = '0';
+            
+            // Remove extra hearts
+            const heartsContainer = document.querySelector('.hearts');
+            const hearts = heartsContainer.querySelectorAll('.heart');
+            for (let i = 3; i < hearts.length; i++) {
+                heartsContainer.removeChild(hearts[i]);
+            }
+            
+            // Remove kiss effect if exists
+            const kissEffect = document.querySelector('.kiss-animation');
+            if (kissEffect) {
+                kissEffect.remove();
+            }
+        }
+        
+        // Hug functionality
+        hugBtn.addEventListener('click', () => {
+            resetAll();
+            container.classList.add('hug-mode');
+            
+            // Show speech bubbles
+            setTimeout(() => {
+                ladooSpeech.textContent = "You're the best!";
+                khushiSpeech.textContent = "I love hugs!";
+                ladooSpeech.style.opacity = '1';
+                khushiSpeech.style.opacity = '1';
+            }, 1000);
+            
+            // Add more hearts during hug
+            setTimeout(() => {
+                const heartsContainer = document.querySelector('.hearts');
+                for (let i = 0; i < 7; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.style.left = `${15 + i * 12}%`;
+                    heart.style.animationDelay = `${i * 0.2}s`;
+                    heartsContainer.appendChild(heart);
+                }
+            }, 1500);
+        });
+        
+        // Kiss functionality
+        kissBtn.addEventListener('click', () => {
+            resetAll();
+            container.classList.add('kiss-mode');
+            
+            // Show speech bubbles
+            setTimeout(() => {
+                ladooSpeech.textContent = "Mwah! 💋";
+                khushiSpeech.textContent = "Mwah! 💋";
+                ladooSpeech.style.opacity = '1';
+                khushiSpeech.style.opacity = '1';
+            }, 500);
+            
+            // Create kiss animation effect
+            setTimeout(() => {
+                const kissEffect = document.createElement('div');
+                kissEffect.classList.add('kiss-animation');
+                kissEffect.style.animation = 'kiss-effect 2s forwards';
+                container.appendChild(kissEffect);
+                
+                // Add more hearts during kiss
+                const heartsContainer = document.querySelector('.hearts');
+                for (let i = 0; i < 10; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.style.left = `${10 + i * 8}%`;
+                    heart.style.animationDelay = `${i * 0.1}s`;
+                    heartsContainer.appendChild(heart);
+                }
+            }, 1000);
+            
+            // Reset speech bubbles after kiss
+            setTimeout(() => {
+                ladooSpeech.style.opacity = '0';
+                khushiSpeech.style.opacity = '0';
+            }, 3000);
+        });
+        
+        // Dance functionality
+        danceBtn.addEventListener('click', () => {
+            resetAll();
+            container.classList.add('dance-mode');
+            
+            // Show speech bubbles
+            setTimeout(() => {
+                ladooSpeech.textContent = "Let's dance!";
+                khushiSpeech.textContent = "Yay! Dancing!";
+                ladooSpeech.style.opacity = '1';
+                khushiSpeech.style.opacity = '1';
+            }, 500);
+            
+            // Add more hearts during dance
+            setTimeout(() => {
+                const heartsContainer = document.querySelector('.hearts');
+                for (let i = 0; i < 5; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.style.left = `${20 + i * 15}%`;
+                    heart.style.animationDelay = `${i * 0.3}s`;
+                    heartsContainer.appendChild(heart);
+                }
+            }, 1000);
+        });
+        
+        // Gift functionality
+        giftBtn.addEventListener('click', () => {
+            resetAll();
+            container.classList.add('gift-mode');
+            
+            // Show speech bubbles
+            setTimeout(() => {
+                ladooSpeech.textContent = "A gift for you!";
+                khushiSpeech.textContent = "Thank you! 💝";
+                ladooSpeech.style.opacity = '1';
+                khushiSpeech.style.opacity = '1';
+            }, 1000);
+        });
+        
+        // Photo functionality
+        photoBtn.addEventListener('click', () => {
+            resetAll();
+            container.classList.add('photo-mode');
+            
+            // Show speech bubbles
+            setTimeout(() => {
+                ladooSpeech.textContent = "Say cheese!";
+                khushiSpeech.textContent = "Cheese! 📸";
+                ladooSpeech.style.opacity = '1';
+                khushiSpeech.style.opacity = '1';
+            }, 1000);
+            
+            // Flash effect
+            setTimeout(() => {
+                const flash = document.createElement('div');
+                flash.style.position = 'absolute';
+                flash.style.top = '0';
+                flash.style.left = '0';
+                flash.style.width = '100%';
+                flash.style.height = '100%';
+                flash.style.background = 'white';
+                flash.style.opacity = '0.8';
+                flash.style.zIndex = '10';
+                flash.style.animation = 'flash 0.5s forwards';
+                container.appendChild(flash);
+                
+                setTimeout(() => {
+                    container.removeChild(flash);
+                }, 500);
+            }, 2000);
+        });
+        
+        talkBtn.addEventListener('click', () => {
+            resetAll();
+            ladooSpeech.textContent = "I miss you moto!";
+            khushiSpeech.textContent = "I miss you too!";
+            
+            ladooSpeech.style.opacity = '1';
+            khushiSpeech.style.opacity = '1';
+            
+            setTimeout(() => {
+                ladooSpeech.style.opacity = '0';
+                khushiSpeech.style.opacity = '0';
+            }, 3000);
+        });
+        
+        resetBtn.addEventListener('click', resetAll);
+    </script>
+</body>
+</html>
